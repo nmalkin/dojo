@@ -3,12 +3,12 @@ DOJO, the Database of JSON Objects
 
 # Endpoints
 
-GET /status:
+## `GET /status`
 
 - run SQL query: SELECT 1;
 - if it returns, print "OK" else print the error
 
-POST /v1/objects:
+## `POST /v1/objects`
 
 1. receive JSON object
 2. validate that it that has the following fields:
@@ -24,7 +24,7 @@ POST /v1/objects:
    - get the id of the new row
 5. return the response {id: id, token: update_token} (filling in the id and update_token accordingly)
 
-POST /v1/objects/<id>
+## `POST /v1/objects/<id>`
 
 1. receive JSON object
 2. validate that it has the following fields:
@@ -42,7 +42,7 @@ POST /v1/objects/<id>
     - update client_version if applicable
     - update updated_at
 
-GET /v1/objects/all
+## `GET /v1/objects/all`
 
  1. use basic auth to validate credentials (default username: testing ; password: changeit)
  2. check if it has the following field:
@@ -52,18 +52,21 @@ GET /v1/objects/all
  5. return {objects: [list of objects], next: next_id or null}
 
 
-## SQL table
+# SQL table structure
 
+This is approximate; see code for actual implementation.
 
-    CREATE TABLE objects
-    id int autoincrement NOT NULL
-    created_at int NOT NULL
-    updated_at int NOT NULL
-    name varchar32 NOT NULL
-    value JSONB NOT NULL
-    update_token varchar64 NOT NULL
-    client_version_first varchar16 NOT NULL
-    client_version_last varchar16 NOT NULL
-    user_id varchar32 NOT NULL
-    user_label varchar32
-    revision int NOT NULL
+```sql
+CREATE TABLE objects
+id int autoincrement NOT NULL
+created_at int NOT NULL
+updated_at int NOT NULL
+name varchar32 NOT NULL
+value text NOT NULL
+update_token varchar64 NOT NULL
+client_version_first varchar16 NOT NULL
+client_version_last varchar16 NOT NULL
+user_id varchar32 NOT NULL
+user_label varchar32
+revision int NOT NULL
+```
