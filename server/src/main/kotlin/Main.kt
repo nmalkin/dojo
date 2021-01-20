@@ -22,8 +22,13 @@ import org.jetbrains.exposed.sql.transactions.experimental.suspendedTransactionA
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.sql.Connection
 
+/* Configuration */
+/** Username & password (concatenated) to use for the basic auth for privileged requests */
 val ADMIN_CREDENTIALS = System.getenv("ADMIN_CREDENTIALS")
     ?: "testing:changeit".also { System.err.println("WARNING: using insecure default credentials") }
+
+/** The only host to allow with CORS. If null, will allow all hosts */
+val ONLY_HOST: String? = System.getenv("ONLY_HOST")
 
 @Serializable
 data class ErrorResponse(val error: String, val message: String?)
@@ -71,6 +76,15 @@ fun Application.module() {
     install(ContentNegotiation) {
         json()
     }
+
+    install(CORS) {
+        if (ONLY_HOST == null) {
+            anyHost()
+        } else {
+            host(ONLY_HOST, schemes = listOf("http", "https"))
+        }
+    }
+
     install(Authentication) {
         basic("privilegedGet") {
             realm = "reading all objects"
