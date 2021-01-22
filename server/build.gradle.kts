@@ -1,4 +1,4 @@
-project.version = "2021.01.18"
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 val ktorVersion = "1.5.0"
 val exposedVersion = "0.28.1"
@@ -30,4 +30,10 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
     implementation("org.xerial:sqlite-jdbc:3.34.0")
+}
+
+tasks.named<ShadowJar>("shadowJar").configure {
+    archiveBaseName.set("dojo")
+    archiveVersion.set("latest")
+    archiveClassifier.set("server")
 }
