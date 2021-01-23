@@ -18,4 +18,4 @@ ARG JAR_FILE="dojo-latest-server.jar"
 COPY ./server/build/libs/$JAR_FILE /app/$JAR_FILE
 WORKDIR /app
 
-CMD ["java", "-server", "-XX:+UnlockExperimentalVMOptions", "-XX:+UseG1GC", "-XX:+UseStringDeduplication", "-jar", "dojo-latest-server.jar"]
+CMD ["java", "-server", "-XX:+UnlockExperimentalVMOptions", "-XX:+UseContainerSupport", "-XX:+UseG1GC", "-XX:+UseStringDeduplication", "-jar", "dojo-latest-server.jar"]
