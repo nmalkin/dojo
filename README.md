@@ -3,7 +3,7 @@ DOJO, the Database of JSON Objects
 
 # Endpoints
 
-## `GET /status`
+## `GET /v1/status`
 
 - run SQL query: SELECT 1;
 - if it returns, print "OK" else print the error

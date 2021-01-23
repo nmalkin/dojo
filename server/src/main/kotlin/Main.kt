@@ -101,11 +101,11 @@ fun Application.module() {
         }
     }
     install(Routing) {
-        get("/") {
+        get("/v1/version") {
             call.respondText(VERSION, ContentType.Text.Plain)
         }
 
-        get("/status") {
+        get("/v1/status") {
             try {
                 val query = suspendedTransactionAsync {
                     Objects.selectAll().count()
