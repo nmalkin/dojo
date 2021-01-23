@@ -31,6 +31,7 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
     runtimeOnly("org.xerial:sqlite-jdbc:3.34.0")
     runtimeOnly("org.postgresql:postgresql:42.2.18")
+    runtimeOnly("org.slf4j:slf4j-simple:1.7.30")
 }
 
 tasks.named<ShadowJar>("shadowJar").configure {
