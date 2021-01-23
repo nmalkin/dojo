@@ -29,7 +29,8 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
     implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
-    implementation("org.xerial:sqlite-jdbc:3.34.0")
+    runtimeOnly("org.xerial:sqlite-jdbc:3.34.0")
+    runtimeOnly("org.postgresql:postgresql:42.2.18")
 }
 
 tasks.named<ShadowJar>("shadowJar").configure {

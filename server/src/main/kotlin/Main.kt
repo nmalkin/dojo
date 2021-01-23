@@ -30,6 +30,12 @@ val ADMIN_CREDENTIALS = System.getenv("ADMIN_CREDENTIALS")
 /** The only host to allow with CORS. If null, will allow all hosts */
 val ONLY_HOST: String? = System.getenv("ONLY_HOST")
 
+/** A JDBC connection string to use for the app's database */
+val DATABASE_URL: String = System.getenv("DATABASE_URL") ?: "jdbc:sqlite:db.sqlite"
+
+/** Username and password for the database connection, separated by a : */
+val DATABASE_CREDENTIALS: String = System.getenv("DATABASE_CREDENTIALS") ?: ":"
+
 @Serializable
 data class ErrorResponse(val error: String, val message: String?)
 
@@ -233,8 +239,32 @@ fun Application.module() {
     }
 }
 
+/**
+ * Given a JDBC connection string, return one of the known JDBC drivers to use with it)
+ */
+fun getDriverFromConnectionString(connection: String): String {
+    if (connection.startsWith("jdbc:sqlite:")) {
+        return "org.sqlite.JDBC"
+    } else if (connection.startsWith("jdbc:postgresql:")) {
+        return "org.postgresql.Driver"
+    }
+
+    throw IllegalArgumentException("unrecognized or invalid database in connection string: $connection")
+}
+
 fun initDatabase() {
-    Database.connect("jdbc:sqlite:db.sqlite", "org.sqlite.JDBC")
+    val (username, password) = DATABASE_CREDENTIALS.split(":").also {
+        if (it.size < 2) {
+            throw RuntimeException("DATABASE_CREDENTIALS environment variable must be specified in the format username:password")
+        }
+    }
+
+    Database.connect(
+        DATABASE_URL,
+        driver = getDriverFromConnectionString(DATABASE_URL),
+        user = username,
+        password = password
+    )
     TransactionManager.manager.defaultIsolationLevel =
         Connection.TRANSACTION_SERIALIZABLE
     transaction { SchemaUtils.create(Objects) }
