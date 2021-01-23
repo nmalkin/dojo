@@ -188,6 +188,16 @@ fun Application.module() {
                     status = HttpStatusCode.BadRequest,
                     message = ErrorResponse(error = "bad request", message = e.toString())
                 )
+            } catch (e: ExposedSQLException) {
+                call.respond(
+                    status = HttpStatusCode.InternalServerError,
+                    message = ErrorResponse(error = "database error", message = e.stackTraceToString()),
+                )
+            } catch (e: Exception) {
+                call.respond(
+                    status = HttpStatusCode.InternalServerError,
+                    message = ErrorResponse(error = "unexpected error", message = e.stackTraceToString()),
+                )
             }
         }
 
@@ -231,6 +241,16 @@ fun Application.module() {
                 call.respond(
                     status = HttpStatusCode.BadRequest,
                     message = ErrorResponse(error = "bad request", message = e.toString())
+                )
+            } catch (e: ExposedSQLException) {
+                call.respond(
+                    status = HttpStatusCode.InternalServerError,
+                    message = ErrorResponse(error = "database error", message = e.stackTraceToString()),
+                )
+            } catch (e: Exception) {
+                call.respond(
+                    status = HttpStatusCode.InternalServerError,
+                    message = ErrorResponse(error = "unexpected error", message = e.stackTraceToString()),
                 )
             }
         }
