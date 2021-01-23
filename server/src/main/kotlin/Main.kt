@@ -157,8 +157,6 @@ fun Application.module() {
                     val response = RetrieveAllResponse(objects = objects, next = nextPageStartId)
                     call.respond(response)
                 }
-
-                call.respondText("the end")
             }
         }
 
