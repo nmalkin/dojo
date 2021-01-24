@@ -1,0 +1,14 @@
+# systemd service file for web server
+# For installation instructions, see https://stackoverflow.com/a/28704296
+# For background, see https://www.digitalocean.com/community/tutorials/understanding-systemd-units-and-unit-files
+
+[Unit]
+Description=webserver Daemon
+
+[Service]
+ExecStart=/home/deploy/start_server.sh
+User=deploy
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
