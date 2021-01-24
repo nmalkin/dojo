@@ -12,6 +12,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import java.sql.Connection
 
 /** Objects and their metadata, as stored in the database */
+@Suppress("MagicNumber")
 object Objects : IntIdTable() {
     val createdAt: Column<Int> = integer("created_at")
     val updatedAt: Column<Int> = integer("updated_at")
