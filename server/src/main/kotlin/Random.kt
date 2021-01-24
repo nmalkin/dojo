@@ -2,7 +2,7 @@ import java.security.SecureRandom
 import java.util.Base64
 
 object Random {
-    private val generator = SecureRandom.getInstanceStrong()
+    private val generator = SecureRandom()
     private val encoder = Base64.getEncoder()
 
     /**
