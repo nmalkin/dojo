@@ -10,7 +10,7 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 
 @Serializable
-data class RetrieveAllResponse(
+private data class RetrieveAllResponse(
     val objects: List<StoredObject>,
     val next: Int?
 )

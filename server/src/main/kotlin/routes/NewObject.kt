@@ -13,7 +13,7 @@ import org.jetbrains.exposed.sql.insertAndGetId
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 
 @Serializable
-data class NewObjectRequest(
+private data class NewObjectRequest(
     @SerialName("api_version") val apiVersion: Int,
     val name: String,
     val value: JsonElement,
@@ -23,7 +23,7 @@ data class NewObjectRequest(
 )
 
 @Serializable
-data class NewObjectResponse(
+private data class NewObjectResponse(
     val id: Int,
     val token: String,
 )

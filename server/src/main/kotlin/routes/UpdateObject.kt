@@ -14,7 +14,7 @@ import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransacti
 import org.jetbrains.exposed.sql.update
 
 @Serializable
-data class UpdateObjectRequest(
+private data class UpdateObjectRequest(
     @SerialName("api_version") val apiVersion: Int,
     @SerialName("client_version") val clientVersion: String,
     val token: String,
@@ -23,7 +23,7 @@ data class UpdateObjectRequest(
 )
 
 @Serializable
-data class UpdateObjectResponse(
+private data class UpdateObjectResponse(
     val id: Int,
     val revision: Int,
 )
