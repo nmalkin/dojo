@@ -44,6 +44,8 @@ fun Application.module() {
         } else {
             host(ONLY_HOST, schemes = listOf("http", "https"))
         }
+
+        allowNonSimpleContentTypes = true // application/json is a non-simple content-type
     }
 
     install(Authentication) {
