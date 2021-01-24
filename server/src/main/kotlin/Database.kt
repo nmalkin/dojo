@@ -96,7 +96,6 @@ fun initDatabase() {
     )
     TransactionManager.manager.defaultIsolationLevel =
         Connection.TRANSACTION_SERIALIZABLE
-    transaction { SchemaUtils.create(Objects) }
 
     transaction {
         SchemaUtils.create(Objects)
