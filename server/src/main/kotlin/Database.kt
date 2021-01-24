@@ -4,7 +4,12 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.transactions.TransactionManager
+import org.jetbrains.exposed.sql.transactions.transaction
+import java.sql.Connection
 
 /** Objects and their metadata, as stored in the database */
 object Objects : IntIdTable() {
@@ -59,4 +64,40 @@ data class StoredObject(
     }
 }
 
+/** How many results to return at a time */
 const val PAGE_SIZE = 50
+
+/**
+ * Given a JDBC connection string, return one of the known JDBC drivers to use with it)
+ */
+fun getDriverFromConnectionString(connection: String): String {
+    if (connection.startsWith("jdbc:sqlite:")) {
+        return "org.sqlite.JDBC"
+    } else if (connection.startsWith("jdbc:postgresql:")) {
+        return "org.postgresql.Driver"
+    }
+
+    throw IllegalArgumentException("unrecognized or invalid database in connection string: $connection")
+}
+
+fun initDatabase() {
+    val (username, password) = DATABASE_CREDENTIALS.split(":").also {
+        if (it.size < 2) {
+            throw RuntimeException("DATABASE_CREDENTIALS environment variable must be specified in the format username:password")
+        }
+    }
+
+    Database.connect(
+        DATABASE_URL,
+        driver = getDriverFromConnectionString(DATABASE_URL),
+        user = username,
+        password = password
+    )
+    TransactionManager.manager.defaultIsolationLevel =
+        Connection.TRANSACTION_SERIALIZABLE
+    transaction { SchemaUtils.create(Objects) }
+
+    transaction {
+        SchemaUtils.create(Objects)
+    }
+}

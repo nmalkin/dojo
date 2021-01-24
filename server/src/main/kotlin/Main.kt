@@ -11,13 +11,8 @@ import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.exceptions.ExposedSQLException
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.experimental.suspendedTransactionAsync
-import org.jetbrains.exposed.sql.transactions.transaction
-import java.sql.Connection
 
 /* Configuration */
 /** Username & password (concatenated) to use for the basic auth for privileged requests */
@@ -89,41 +84,6 @@ fun Application.module() {
 
         newObject()
         updateObject()
-    }
-}
-
-/**
- * Given a JDBC connection string, return one of the known JDBC drivers to use with it)
- */
-fun getDriverFromConnectionString(connection: String): String {
-    if (connection.startsWith("jdbc:sqlite:")) {
-        return "org.sqlite.JDBC"
-    } else if (connection.startsWith("jdbc:postgresql:")) {
-        return "org.postgresql.Driver"
-    }
-
-    throw IllegalArgumentException("unrecognized or invalid database in connection string: $connection")
-}
-
-fun initDatabase() {
-    val (username, password) = DATABASE_CREDENTIALS.split(":").also {
-        if (it.size < 2) {
-            throw RuntimeException("DATABASE_CREDENTIALS environment variable must be specified in the format username:password")
-        }
-    }
-
-    Database.connect(
-        DATABASE_URL,
-        driver = getDriverFromConnectionString(DATABASE_URL),
-        user = username,
-        password = password
-    )
-    TransactionManager.manager.defaultIsolationLevel =
-        Connection.TRANSACTION_SERIALIZABLE
-    transaction { SchemaUtils.create(Objects) }
-
-    transaction {
-        SchemaUtils.create(Objects)
     }
 }
 
