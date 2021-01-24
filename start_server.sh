@@ -6,8 +6,12 @@
 # It is recommended to be used with a systemd service file (see `server.service`).
 
 cd /home/deploy
-. ./.env
 
-set -ex
+set -a  # Automatically export the variables, to make them available in the subprocess, see https://unix.stackexchange.com/a/79077
+. ./.env
+set +a  # Done with auto-export
+
+set -e  # Stop script on error
+set -x  # Print executed commands
 
 java -server -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:+UseStringDeduplication -jar dojo-latest-server.jar
