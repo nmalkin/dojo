@@ -1,3 +1,5 @@
+# NOTE: the application, dockerized with this file, works just fine locally but is very slow to run on an AWS instance (albeit the lowest-resource one). In the same instance, the server ran fine without a container. This Dockerfile is therefore currently not used.
+
 FROM openjdk:15-jdk-alpine
 
 # Use Tini: https://github.com/krallin/tini
