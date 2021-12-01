@@ -1,6 +1,19 @@
 DOJO, the Database of JSON Objects
 ===================================
 
+# Prerequisites
+
+You'll need a Java Runtime Environment (JRE) installed. For example, on Debian/Ubuntu, you can run `sudo apt install default-jre`.  
+Currently, version 14 or newer of the JDK is supported.
+
+# Run
+
+    java -jar <path-to-jar>.jar
+
+The server will launch and start listening. See the next section for how to interact with it.
+
+Note that this will create a `db.sqlite` file in your current directory. To reset the server, delete that file.
+
 # Endpoints
 
 ## `GET /v1/status`
