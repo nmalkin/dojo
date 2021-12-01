@@ -1,9 +1,11 @@
 /* ktlint-disable no-wildcard-imports */
-import io.ktor.application.*
-import io.ktor.http.*
-import io.ktor.request.*
-import io.ktor.response.*
-import io.ktor.routing.*
+import io.ktor.application.call
+import io.ktor.features.UnsupportedMediaTypeException
+import io.ktor.http.HttpStatusCode
+import io.ktor.request.receive
+import io.ktor.response.respond
+import io.ktor.routing.Route
+import io.ktor.routing.post
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
@@ -61,6 +63,14 @@ fun Route.newObject() {
             call.respond(
                 status = HttpStatusCode.InternalServerError,
                 message = ErrorResponse(error = "database error", message = e.stackTraceToString()),
+            )
+        } catch (e: UnsupportedMediaTypeException) {
+            call.respond(
+                status = HttpStatusCode.InternalServerError,
+                message = ErrorResponse(
+                    error = "content-type error",
+                    message = "make sure you're calling this endpoint with 'Accept: application/json'"
+                ),
             )
         } catch (e: Exception) {
             call.respond(

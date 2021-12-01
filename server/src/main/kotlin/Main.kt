@@ -1,14 +1,26 @@
 /* ktlint-disable no-wildcard-imports */
 
-import io.ktor.application.*
-import io.ktor.auth.*
-import io.ktor.features.*
-import io.ktor.http.*
-import io.ktor.response.*
-import io.ktor.routing.*
-import io.ktor.serialization.*
-import io.ktor.server.engine.*
-import io.ktor.server.netty.*
+import io.ktor.application.Application
+import io.ktor.application.call
+import io.ktor.application.install
+import io.ktor.auth.Authentication
+import io.ktor.auth.UserIdPrincipal
+import io.ktor.auth.authenticate
+import io.ktor.auth.basic
+import io.ktor.features.CORS
+import io.ktor.features.CallLogging
+import io.ktor.features.ContentNegotiation
+import io.ktor.features.DefaultHeaders
+import io.ktor.features.StatusPages
+import io.ktor.http.ContentType
+import io.ktor.http.HttpStatusCode
+import io.ktor.response.respond
+import io.ktor.response.respondText
+import io.ktor.routing.Routing
+import io.ktor.routing.get
+import io.ktor.serialization.json
+import io.ktor.server.engine.embeddedServer
+import io.ktor.server.netty.Netty
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.exceptions.ExposedSQLException
 import org.jetbrains.exposed.sql.selectAll
@@ -36,6 +48,13 @@ fun Application.module() {
     install(CallLogging)
     install(ContentNegotiation) {
         json()
+    }
+    install(StatusPages) {
+        exception<Throwable> { e ->
+            call.respond(
+                HttpStatusCode.InternalServerError, message = ErrorResponse(error = "error", message = e.message),
+            )
+        }
     }
 
     install(CORS) {
