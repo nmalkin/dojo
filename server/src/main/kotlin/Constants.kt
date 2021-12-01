@@ -1,1 +1,1 @@
-const val VERSION = "2021.01.24"
+const val VERSION = "2021.12.1"
