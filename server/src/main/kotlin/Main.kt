@@ -78,6 +78,19 @@ fun Application.module() {
     }
 
     install(Routing) {
+        get("/") {
+            call.respondText(
+                """
+                     _       _       
+                  __| | ___ (_) ___  
+                 / _` |/ _ \| |/ _ \ 
+                | (_| | (_) | | (_) |
+                 \__,_|\___// |\___/ 
+                          |__/       
+                """.trimIndent(), ContentType.Text.Plain
+            )
+        }
+
         get("/v1/version") {
             call.respondText(VERSION, ContentType.Text.Plain)
         }
